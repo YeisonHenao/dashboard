@@ -11,12 +11,12 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-[oklch(var(--primary-50))] dark:bg-[oklch(var(--primary-900))] shadow-lg sticky top-0 z-50">
+    <nav className="bg-[var(--primary-50)] tema-oscuro:bg-[var(--primary-900)] shadow-lg sticky top-0 z-50">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <h1 className="text-xl font-bold text-[oklch(var(--primary-900))] dark:text-[oklch(var(--primary-50))]">
+            <h1 className="text-xl font-bold text-[var(--primary-900)] tema-oscuro:text-[var(--primary-50)]">
               Mi Dashboard
             </h1>
           </div>
@@ -27,8 +27,8 @@ const Navbar = () => {
               to="/"
               className={`inline-flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
                 isActive('/')
-                  ? 'bg-[oklch(var(--primary-100))] dark:bg-[oklch(var(--primary-800))] text-[oklch(var(--primary-700))] dark:text-[oklch(var(--primary-200))]'
-                  : 'text-[oklch(var(--primary-700))] dark:text-[oklch(var(--primary-300))] hover:bg-[oklch(var(--primary-100))] dark:hover:bg-[oklch(var(--primary-800))]'
+                  ? 'bg-[var(--primary-100)] tema-oscuro:bg-[var(--primary-800)] text-[var(--primary-700)] tema-oscuro:text-[var(--primary-200)]'
+                  : 'text-[var(--primary-700)] tema-oscuro:text-[var(--primary-300)] hover:bg-[var(--primary-100)] tema-oscuro:hover:bg-[var(--primary-800)]'
               }`}
             >
               Inicio
@@ -37,8 +37,8 @@ const Navbar = () => {
               to="/login"
               className={`inline-flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
                 isActive('/login')
-                  ? 'bg-[oklch(var(--primary-100))] dark:bg-[oklch(var(--primary-800))] text-[oklch(var(--primary-700))] dark:text-[oklch(var(--primary-200))]'
-                  : 'text-[oklch(var(--primary-700))] dark:text-[oklch(var(--primary-300))] hover:bg-[oklch(var(--primary-100))] dark:hover:bg-[oklch(var(--primary-800))]'
+                  ? 'bg-[var(--primary-100)] tema-oscuro:bg-[var(--primary-800)] text-[var(--primary-700)] tema-oscuro:text-[var(--primary-200)]'
+                  : 'text-[var(--primary-700)] tema-oscuro:text-[var(--primary-300)] hover:bg-[var(--primary-100)] tema-oscuro:hover:bg-[var(--primary-800)]'
               }`}
             >
               Login
@@ -49,7 +49,7 @@ const Navbar = () => {
           <div className="flex items-center">
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-full text-[oklch(var(--primary-700))] dark:text-[oklch(var(--primary-300))] hover:bg-[oklch(var(--primary-100))] dark:hover:bg-[oklch(var(--primary-800))] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[oklch(var(--primary-500))] transition-colors duration-200"
+              className="p-2 rounded-full text-[var(--primary-700)] tema-oscuro:text-[var(--primary-300)] hover:bg-[var(--primary-100)] tema-oscuro:hover:bg-[var(--primary-800)] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--primary-500)] transition-colors duration-200"
               aria-label="Cambiar tema"
             >
               {theme === 'light' ? (
