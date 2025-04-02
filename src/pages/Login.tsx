@@ -1,108 +1,143 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Input from '../components/ui/Input';
+import Button from '../components/ui/Button';
+import Card from '../components/ui/Card';
+
+interface LoginForm {
+  email: string;
+  password: string;
+}
 
 const Login = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
+  const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState<LoginForm>({
     email: '',
     password: '',
   });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Aquí iría la lógica de autenticación
-    console.log('Form submitted:', formData);
-    navigate('/');
-  };
+  const [errors, setErrors] = useState<Partial<LoginForm>>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
+    if (errors[name as keyof LoginForm]) {
+      setErrors(prev => ({ ...prev, [name]: undefined }));
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors: Partial<LoginForm> = {};
+    
+    if (!formData.email) {
+      newErrors.email = 'El email es requerido';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'El email no es válido';
+    }
+
+    if (!formData.password) {
+      newErrors.password = 'La contraseña es requerida';
+    } else if (formData.password.length < 6) {
+      newErrors.password = 'La contraseña debe tener al menos 6 caracteres';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!validateForm()) return;
+
+    setIsLoading(true);
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      navigate('/');
+    } catch (error) {
+      console.error('Error al iniciar sesión:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-[oklch(var(--primary-900))] dark:text-[oklch(var(--primary-50))]">
-            Inicia sesión en tu cuenta
+    <div className="fixed inset-0 flex items-center justify-center overflow-hidden">
+      {/* Fondo con degradado y efecto glassmorphism */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-500 via-purple-500 to-blue-600 animate-gradient">
+        <div className="absolute inset-0 bg-white/10 backdrop-blur-3xl" />
+        {/* Círculos decorativos */}
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob" />
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000" />
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-blue-400 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000" />
+      </div>
+
+      {/* Contenido del formulario */}
+      <Card className="w-full max-w-md relative z-10 bg-white/90 dark:bg-gray-900/90 backdrop-blur-lg border-white/20 mx-4">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+            Iniciar Sesión
           </h2>
-          <p className="mt-2 text-center text-sm text-[oklch(var(--primary-700))] dark:text-[oklch(var(--primary-300))]">
-            O{' '}
-            <a href="#" className="font-medium text-[oklch(var(--primary-600))] dark:text-[oklch(var(--primary-400))] hover:text-[oklch(var(--primary-500))] dark:hover:text-[oklch(var(--primary-300))]">
-              crea una cuenta nueva
-            </a>
+          <p className="text-gray-600 dark:text-gray-300">
+            Ingresa tus credenciales para continuar
           </p>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="rounded-md shadow-sm -space-y-px">
-            <div>
-              <label htmlFor="email" className="sr-only">
-                Correo electrónico
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-[oklch(var(--primary-300))] dark:border-[oklch(var(--primary-700))] placeholder-[oklch(var(--primary-500))] dark:placeholder-[oklch(var(--primary-400))] text-[oklch(var(--primary-900))] dark:text-[oklch(var(--primary-50))] rounded-t-md focus:outline-none focus:ring-[oklch(var(--primary-500))] focus:border-[oklch(var(--primary-500))] focus:z-10 sm:text-sm bg-[oklch(var(--primary-50))] dark:bg-[oklch(var(--primary-900))]"
-                placeholder="Correo electrónico"
-                value={formData.email}
-                onChange={handleChange}
-              />
-            </div>
-            <div>
-              <label htmlFor="password" className="sr-only">
-                Contraseña
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete="current-password"
-                required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-[oklch(var(--primary-300))] dark:border-[oklch(var(--primary-700))] placeholder-[oklch(var(--primary-500))] dark:placeholder-[oklch(var(--primary-400))] text-[oklch(var(--primary-900))] dark:text-[oklch(var(--primary-50))] rounded-b-md focus:outline-none focus:ring-[oklch(var(--primary-500))] focus:border-[oklch(var(--primary-500))] focus:z-10 sm:text-sm bg-[oklch(var(--primary-50))] dark:bg-[oklch(var(--primary-900))]"
-                placeholder="Contraseña"
-                value={formData.password}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <Input
+            label="Email"
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder="tu@email.com"
+            error={errors.email}
+            required
+          />
+          <Input
+            label="Contraseña"
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+            placeholder="••••••••"
+            error={errors.password}
+            required
+          />
           <div className="flex items-center justify-between">
-            <div className="flex items-center">
+            <label className="flex items-center">
               <input
-                id="remember-me"
-                name="remember-me"
                 type="checkbox"
-                className="h-4 w-4 text-[oklch(var(--primary-600))] focus:ring-[oklch(var(--primary-500))] border-[oklch(var(--primary-300))] dark:border-[oklch(var(--primary-700))] rounded"
+                className="h-4 w-4 text-blue-600 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500"
               />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-[oklch(var(--primary-700))] dark:text-[oklch(var(--primary-300))]">
-                Recuérdame
-              </label>
-            </div>
-
-            <div className="text-sm">
-              <a href="#" className="font-medium text-[oklch(var(--primary-600))] dark:text-[oklch(var(--primary-400))] hover:text-[oklch(var(--primary-500))] dark:hover:text-[oklch(var(--primary-300))]">
-                ¿Olvidaste tu contraseña?
-              </a>
-            </div>
-          </div>
-
-          <div>
-            <button
-              type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-[oklch(var(--primary-600))] hover:bg-[oklch(var(--primary-700))] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[oklch(var(--primary-500))]"
+              <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                Recordarme
+              </span>
+            </label>
+            <a
+              href="#"
+              className="text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
             >
-              Iniciar sesión
-            </button>
+              ¿Olvidaste tu contraseña?
+            </a>
           </div>
+          <Button
+            type="submit"
+            className="w-full"
+            isLoading={isLoading}
+          >
+            Iniciar Sesión
+          </Button>
+          <p className="text-center text-sm text-gray-600 dark:text-gray-400">
+            ¿No tienes una cuenta?{' '}
+            <a
+              href="#"
+              className="font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+            >
+              Regístrate
+            </a>
+          </p>
         </form>
-      </div>
+      </Card>
     </div>
   );
 };

@@ -1,14 +1,15 @@
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import BaseLayout from './layouts/BaseLayout';
 import AuthLayout from './layouts/AuthLayout';
 import Home from './pages/Home';
 import Login from './pages/Login';
 
-function App() {
+const App = () => {
   return (
     <Router>
       <Routes>
-        {/* Rutas públicas */}
+        {/* Rutas públicas (auth) */}
         <Route element={<AuthLayout />}>
           <Route path="/login" element={<Login />} />
         </Route>
@@ -23,6 +24,6 @@ function App() {
       </Routes>
     </Router>
   );
-}
+};
 
 export default App;
