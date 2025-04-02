@@ -1,5 +1,6 @@
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useTheme } from '../context/ThemeContext';
+import { useTheme } from '../context/useTheme';
 
 const Navbar = () => {
   const { theme, toggleTheme } = useTheme();
@@ -10,12 +11,14 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white dark:bg-gray-800 shadow-lg sticky top-0 z-50">
+    <nav className="bg-[oklch(var(--primary-50))] dark:bg-[oklch(var(--primary-900))] shadow-lg sticky top-0 z-50">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <h1 className="text-xl font-bold text-gray-900 dark:text-white">Mi Dashboard</h1>
+            <h1 className="text-xl font-bold text-[oklch(var(--primary-900))] dark:text-[oklch(var(--primary-50))]">
+              Mi Dashboard
+            </h1>
           </div>
 
           {/* Navegación centrada */}
@@ -24,8 +27,8 @@ const Navbar = () => {
               to="/"
               className={`inline-flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
                 isActive('/')
-                  ? 'bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-200'
-                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                  ? 'bg-[oklch(var(--primary-100))] dark:bg-[oklch(var(--primary-800))] text-[oklch(var(--primary-700))] dark:text-[oklch(var(--primary-200))]'
+                  : 'text-[oklch(var(--primary-700))] dark:text-[oklch(var(--primary-300))] hover:bg-[oklch(var(--primary-100))] dark:hover:bg-[oklch(var(--primary-800))]'
               }`}
             >
               Inicio
@@ -34,8 +37,8 @@ const Navbar = () => {
               to="/login"
               className={`inline-flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
                 isActive('/login')
-                  ? 'bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-200'
-                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                  ? 'bg-[oklch(var(--primary-100))] dark:bg-[oklch(var(--primary-800))] text-[oklch(var(--primary-700))] dark:text-[oklch(var(--primary-200))]'
+                  : 'text-[oklch(var(--primary-700))] dark:text-[oklch(var(--primary-300))] hover:bg-[oklch(var(--primary-100))] dark:hover:bg-[oklch(var(--primary-800))]'
               }`}
             >
               Login
@@ -46,7 +49,7 @@ const Navbar = () => {
           <div className="flex items-center">
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
+              className="p-2 rounded-full text-[oklch(var(--primary-700))] dark:text-[oklch(var(--primary-300))] hover:bg-[oklch(var(--primary-100))] dark:hover:bg-[oklch(var(--primary-800))] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[oklch(var(--primary-500))] transition-colors duration-200"
               aria-label="Cambiar tema"
             >
               {theme === 'light' ? (
