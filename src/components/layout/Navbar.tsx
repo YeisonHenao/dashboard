@@ -1,8 +1,13 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useTheme } from '../context/useTheme';
+import { useTheme } from '../../context/useTheme';
 
-const Navbar = () => {
+interface NavbarProps {
+  onMenuClick: () => void;
+  pageTitle?: string;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ onMenuClick, pageTitle }) => {
   const { theme, toggleTheme } = useTheme();
   const location = useLocation();
 
@@ -14,11 +19,32 @@ const Navbar = () => {
     <nav className="bg-[var(--primary-50)] tema-oscuro:bg-[var(--primary-900)] shadow-lg sticky top-0 z-50">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center h-16">
-          {/* Logo */}
-          <div className="flex-shrink-0">
-            <h1 className="text-xl font-bold text-[var(--primary-900)] tema-oscuro:text-[var(--primary-50)]">
-              Mi Dashboard
-            </h1>
+          {/* Botón de menú móvil */}
+          <button
+            onClick={onMenuClick}
+            className="md:hidden p-2 rounded-md text-[var(--primary-700)] tema-oscuro:text-[var(--primary-300)]"
+            aria-label="Menu"
+          >
+            <svg
+              className="h-6 w-6"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+
+          {/* Logo y Título */}
+          <div className="flex items-center space-x-4">
+            <div className="flex-shrink-0">
+              <h1 className="text-xl font-bold text-[var(--primary-900)] tema-oscuro:text-[var(--primary-50)]">
+                {pageTitle || 'Mi Dashboard'}
+              </h1>
+            </div>
           </div>
 
           {/* Navegación centrada */}
@@ -73,4 +99,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar; 
+export default Navbar;

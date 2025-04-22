@@ -1,54 +1,50 @@
-# React + TypeScript + Vite
+# Dashboard App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este proyecto es una aplicación de Dashboard construida con TypeScript y React. La aplicación incluye una variedad de componentes que permiten visualizar estadísticas, gráficos y tablas de datos.
 
-Currently, two official plugins are available:
+## Estructura del Proyecto
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **src/**: Contiene el código fuente de la aplicación.
+  - **components/**: Componentes reutilizables de la aplicación.
+    - **layout/**: Contiene los componentes de diseño como `Navbar`, `Sidebar` y `Layout`.
+    - **charts/**: Contiene componentes para gráficos como `BarChart`, `LineChart` y `PieChart`.
+    - **stats/**: Contiene componentes para mostrar estadísticas como `StatCard` y `StatsGrid`.
+    - **tables/**: Contiene componentes para tablas como `DataTable` y `TablePagination`.
+  - **pages/**: Contiene las vistas de la aplicación, incluyendo `Dashboard`.
+  - **hooks/**: Contiene hooks personalizados, como `useStats`.
+  - **types/**: Contiene tipos e interfaces utilizados en el proyecto.
+  - **utils/**: Contiene funciones de utilidad.
+  - **styles/**: Contiene estilos globales.
+  - **App.tsx**: Punto de entrada de la aplicación.
 
-## Expanding the ESLint configuration
+## Instalación
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+1. Clona el repositorio:
+   ```bash
+   git clone <url-del-repositorio>
+   ```
+2. Navega al directorio del proyecto:
+   ```bash
+   cd dashboard-app
+   ```
+3. Instala las dependencias:
+   ```bash
+   npm install
+   ```
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Uso
+
+Para iniciar la aplicación, ejecuta:
+```bash
+npm start
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+La aplicación se abrirá en `http://localhost:3000`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Contribuciones
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+Las contribuciones son bienvenidas. Si deseas contribuir, por favor abre un issue o envía un pull request.
+
+## Licencia
+
+Este proyecto está bajo la Licencia MIT.

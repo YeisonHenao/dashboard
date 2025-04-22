@@ -1,28 +1,20 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import BaseLayout from './layouts/BaseLayout';
-import AuthLayout from './layouts/AuthLayout';
-import Home from './pages/Home';
-import Login from './pages/Login';
+import { AppRouter } from './config/router/AppRouter';
+import { useAuth } from './context/AuthContext';
+import { useTheme } from './context/useTheme';
 
 const App = () => {
+  const { theme } = useTheme();
+  const { isLoading } = useAuth();
+
+  if (isLoading) {
+    return <div>Cargando...</div>;
+  }
+
   return (
-    <Router>
-      <Routes>
-        {/* Rutas públicas (auth) */}
-        <Route element={<AuthLayout />}>
-          <Route path="/login" element={<Login />} />
-        </Route>
-
-        {/* Rutas protegidas */}
-        <Route element={<BaseLayout />}>
-          <Route path="/" element={<Home />} />
-        </Route>
-
-        {/* Redirección por defecto */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </Router>
+    <div className={`app ${theme}`}>
+      <AppRouter />
+    </div>
   );
 };
 

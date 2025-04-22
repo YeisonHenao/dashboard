@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 
 type Theme = 'light' | 'dark';
 
@@ -9,18 +9,20 @@ interface ThemeContextType {
 
 export const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export const ThemeProvider = ({ children }: { children: ReactNode }) => {
+export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [theme, setTheme] = useState<Theme>(() => {
+    // Recuperar tema guardado o usar preferencia del sistema
     const savedTheme = localStorage.getItem('theme');
-    return (savedTheme as Theme) || 'light';
+    if (savedTheme === 'light' || savedTheme === 'dark') {
+      return savedTheme;
+    }
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   });
 
   useEffect(() => {
-    const root = window.document.documentElement;
-    root.classList.remove('tema-oscuro');
-    if (theme === 'dark') {
-      root.classList.add('tema-oscuro');
-    }
+    // Actualizar clase en el documento y guardar preferencia
+    document.documentElement.classList.remove('light', 'dark');
+    document.documentElement.classList.add(theme);
     localStorage.setItem('theme', theme);
   }, [theme]);
 
@@ -33,4 +35,4 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
       {children}
     </ThemeContext.Provider>
   );
-}; 
+};
