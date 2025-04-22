@@ -1,61 +1,33 @@
 import React, { useState } from 'react';
+import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../config/router/routes';
+import { mockAuthService } from '../mocks';
 import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
 
-interface LoginForm {
-  email: string;
-  password: string;
-}
-
-const Login = () => {
+const Login: React.FC = () => {
+  const { login } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState<LoginForm>({
-    email: '',
-    password: '',
-  });
-  const [errors, setErrors] = useState<Partial<LoginForm>>({});
+  const [error, setError] = useState('');
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    if (errors[name as keyof LoginForm]) {
-      setErrors(prev => ({ ...prev, [name]: undefined }));
-    }
-  };
-
-  const validateForm = () => {
-    const newErrors: Partial<LoginForm> = {};
-    
-    if (!formData.email) {
-      newErrors.email = 'El email es requerido';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'El email no es válido';
-    }
-
-    if (!formData.password) {
-      newErrors.password = 'La contraseña es requerida';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'La contraseña debe tener al menos 6 caracteres';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-    if (!validateForm()) return;
-
     setIsLoading(true);
+    setError('');
+
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      navigate('/');
-    } catch (error) {
-      console.error('Error al iniciar sesión:', error);
+      const formData = new FormData(e.currentTarget);
+      const email = formData.get('email') as string;
+      const password = formData.get('password') as string;
+
+      const { token, user } = await mockAuthService.login(email, password);
+      login(token, user);
+      navigate(ROUTES.DASHBOARD);
+    } catch {
+      setError('Credenciales inválidas');
     } finally {
       setIsLoading(false);
     }
@@ -87,22 +59,21 @@ const Login = () => {
             label="Email"
             type="email"
             name="email"
-            value={formData.email}
-            onChange={handleChange}
             placeholder="tu@email.com"
-            error={errors.email}
             required
           />
           <Input
             label="Contraseña"
             type="password"
             name="password"
-            value={formData.password}
-            onChange={handleChange}
             placeholder="••••••••"
-            error={errors.password}
             required
           />
+          {error && (
+            <p className="text-sm text-red-500">
+              {error}
+            </p>
+          )}
           <div className="flex items-center justify-between">
             <label className="flex items-center">
               <input
@@ -142,4 +113,4 @@ const Login = () => {
   );
 };
 
-export default Login; 
+export default Login;
