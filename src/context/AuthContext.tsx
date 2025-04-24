@@ -1,8 +1,9 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { mockAuthService } from '../mocks';
 
 interface AuthContextType {
     isAuthenticated: boolean;
-    isLoading: boolean;  // Añadimos esta propiedad
+    isLoading: boolean;
     user: User | null;
     login: (token: string, userData: User) => void;
     logout: () => void;
@@ -12,25 +13,35 @@ interface User {
     id: string;
     email: string;
     name: string;
+    role: string;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-    const [isLoading, setIsLoading] = useState<boolean>(true);  // Añadimos el estado
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [user, setUser] = useState<User | null>(null);
 
     useEffect(() => {
         const initAuth = async () => {
             try {
-                // Verificar token al iniciar
                 const token = localStorage.getItem('token');
                 const userData = localStorage.getItem('user');
+
+                console.log('Iniciando autenticación:', { hasToken: !!token, hasUser: !!userData });
                 
                 if (token && userData) {
-                    setIsAuthenticated(true);
-                    setUser(JSON.parse(userData));
+                    const isValid = await mockAuthService.validateToken(token);
+                    if (isValid) {
+                        setIsAuthenticated(true);
+                        setUser(JSON.parse(userData));
+                        console.log('Autenticación restaurada:', { user: JSON.parse(userData) });
+                    } else {
+                        console.log('Token inválido, limpiando sesión');
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('user');
+                    }
                 }
             } catch (error) {
                 console.error('Error al inicializar auth:', error);
@@ -43,6 +54,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }, []);
 
     const login = (token: string, userData: User) => {
+        console.log('Login exitoso:', { userData });
         localStorage.setItem('token', token);
         localStorage.setItem('user', JSON.stringify(userData));
         setIsAuthenticated(true);
@@ -50,6 +62,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     const logout = () => {
+        console.log('Cerrando sesión');
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         setIsAuthenticated(false);
@@ -59,7 +72,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return (
         <AuthContext.Provider value={{ 
             isAuthenticated, 
-            isLoading,  // Incluimos isLoading en el valor del contexto
+            isLoading, 
             user, 
             login, 
             logout 

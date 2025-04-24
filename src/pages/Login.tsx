@@ -23,10 +23,15 @@ const Login: React.FC = () => {
       const email = formData.get('email') as string;
       const password = formData.get('password') as string;
 
+      console.log('Iniciando proceso de login...', { email });
+
       const { token, user } = await mockAuthService.login(email, password);
+      console.log('Login exitoso, redirigiendo...', { user });
+      
       login(token, user);
       navigate(ROUTES.DASHBOARD);
-    } catch {
+    } catch (err) {
+      console.error('Error en login:', err);
       setError('Credenciales inválidas');
     } finally {
       setIsLoading(false);
@@ -34,79 +39,36 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center overflow-hidden">
-      {/* Fondo con degradado y efecto glassmorphism */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-500 via-purple-500 to-blue-600 animate-gradient">
-        <div className="absolute inset-0 bg-white/10 backdrop-blur-3xl" />
-        {/* Círculos decorativos */}
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000" />
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-blue-400 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000" />
-      </div>
-
-      {/* Contenido del formulario */}
-      <Card className="w-full max-w-md relative z-10 bg-white/90 dark:bg-gray-900/90 backdrop-blur-lg border-white/20 mx-4">
-        <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-            Iniciar Sesión
-          </h2>
-          <p className="text-gray-600 dark:text-gray-300">
-            Ingresa tus credenciales para continuar
-          </p>
-        </div>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <Card className="w-full max-w-md">
+        <h2 className="text-2xl font-bold text-center mb-6">Iniciar Sesión</h2>
+        {error && (
+          <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">
+            {error}
+          </div>
+        )}
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input
             label="Email"
-            type="email"
             name="email"
-            placeholder="tu@email.com"
+            type="email"
             required
+            defaultValue="admin@test.com"
           />
           <Input
             label="Contraseña"
-            type="password"
             name="password"
-            placeholder="••••••••"
+            type="password"
             required
+            defaultValue="admin123"
           />
-          {error && (
-            <p className="text-sm text-red-500">
-              {error}
-            </p>
-          )}
-          <div className="flex items-center justify-between">
-            <label className="flex items-center">
-              <input
-                type="checkbox"
-                className="h-4 w-4 text-blue-600 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500"
-              />
-              <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">
-                Recordarme
-              </span>
-            </label>
-            <a
-              href="#"
-              className="text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
-            >
-              ¿Olvidaste tu contraseña?
-            </a>
-          </div>
           <Button
             type="submit"
             className="w-full"
             isLoading={isLoading}
           >
-            Iniciar Sesión
+            {isLoading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
           </Button>
-          <p className="text-center text-sm text-gray-600 dark:text-gray-400">
-            ¿No tienes una cuenta?{' '}
-            <a
-              href="#"
-              className="font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
-            >
-              Regístrate
-            </a>
-          </p>
         </form>
       </Card>
     </div>

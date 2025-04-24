@@ -3,12 +3,28 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import BaseLayout from '../../layouts/BaseLayout';
 import AuthLayout from '../../layouts/AuthLayout';
 import { PublicRoutes } from './PublicRoutes';
-import { PrivateRoutes } from './PrivateRoutes';
-import { useAuth } from '../../hooks/useAuth'; // Asegúrate de crear este hook
-import { ROUTES } from './ROUTES';
+import { useAuth } from '../../context/AuthContext';
+import { ROUTES } from './routes';
+import Dashboard from '../../pages/Dashboard';
+
+interface RouteConfig {
+    path: string;
+    Component: React.ComponentType;
+}
+
+export const PrivateRoutes: RouteConfig[] = [
+    {
+        path: ROUTES.DASHBOARD,
+        Component: Dashboard
+    }
+];
 
 export const AppRouter: React.FC = () => {
-    const { isAuthenticated } = useAuth(); // Hook personalizado para manejar la autenticación
+    const { isAuthenticated, isLoading } = useAuth();
+
+    if (isLoading) {
+        return <div>Cargando...</div>;
+    }
 
     return (
         <Router>

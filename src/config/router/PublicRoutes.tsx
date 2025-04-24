@@ -1,8 +1,14 @@
 import Login from '../../pages/Login';
+import Register from '../../pages/Register';
+import { ROUTES } from './routes';
 
 export const PublicRoutes = [
-  {
-    path: '/login',
-    Component: Login
-  }
+    {
+        path: ROUTES.LOGIN,
+        Component: Login
+    },
+    {
+        path: ROUTES.REGISTER,
+        Component: Register
+    }
 ];
