@@ -19,10 +19,8 @@ export const Layout: React.FC<LayoutProps> = ({ children, pageTitle }) => {
             <Navbar onMenuClick={toggleSidebar} pageTitle={pageTitle} />
             <div className="flex h-[calc(100vh-64px)]">
                 <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-                <main className="flex-1 overflow-auto p-6">
-                    <div className="container mx-auto">
-                        {children}
-                    </div>
+                <main className="flex-1 overflow-auto">
+                    {children}
                 </main>
             </div>
         </div>

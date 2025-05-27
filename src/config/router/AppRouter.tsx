@@ -48,22 +48,24 @@ export const AppRouter: React.FC = () => {
 
                 {/* Rutas protegidas */}
                 <Route element={<BaseLayout />}>
+                    <Route path="/" element={<Dashboard />} />
                     {PrivateRoutes.map(({ path, Component }) => (
-                        <Route
-                            key={path}
-                            path={path}
-                            element={
-                                isAuthenticated ? (
-                                    <Component />
-                                ) : (
-                                    <Navigate to={ROUTES.LOGIN} replace />
-                                )
-                            }
-                        />
+                        path !== '/' && (
+                            <Route
+                                key={path}
+                                path={path}
+                                element={
+                                    isAuthenticated ? (
+                                        <Component />
+                                    ) : (
+                                        <Navigate to={ROUTES.LOGIN} replace />
+                                    )
+                                }
+                            />
+                        )
                     ))}
                 </Route>
 
-                {/* Redirección por defecto */}
                 <Route 
                     path="*" 
                     element={
